@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.davydov.MySecondAppSpringBoot.exception.UnsupportedCodeException;
 import ru.davydov.MySecondAppSpringBoot.exception.ValidationFailedException;
 import ru.davydov.MySecondAppSpringBoot.model.*;
+import ru.davydov.MySecondAppSpringBoot.service.ModifyRequestService;
 import ru.davydov.MySecondAppSpringBoot.service.ModifyResponseService;
 import ru.davydov.MySecondAppSpringBoot.service.ValidationService;
 import ru.davydov.MySecondAppSpringBoot.util.DateTimeUtil;
@@ -26,17 +27,26 @@ public class MyController {
 
     private final ValidationService validationService;
     private final ModifyResponseService modifyResponseService;
+    private final ModifyRequestService modifyNameRequestService;
+    private final ModifyRequestService modifySourceRequestService;
 
     @Autowired
-    public MyController(ValidationService validationService, @Qualifier("ModifySystemTimeResponseService") ModifyResponseService modifyResponseService){
+    public MyController(ValidationService validationService, @Qualifier("ModifySystemTimeResponseService") ModifyResponseService modifyResponseService,
+                        @Qualifier("ModifySystemNameRequestService") ModifyRequestService modifyNameRequestService, @Qualifier("ModifySourceRequestService") ModifyRequestService modifySourceRequestService
+                        ){
+
         this.validationService = validationService;
         this.modifyResponseService = modifyResponseService;
+        this.modifyNameRequestService = modifyNameRequestService;
+        this.modifySourceRequestService = modifySourceRequestService;
     }
 
     @PostMapping(value = "/feedback")
     public ResponseEntity<Response> feedback(@Valid @RequestBody Request request, BindingResult bindingResult){
 
         log.info("request: {}", request);
+
+        request.setSystemTime(DateTimeUtil.getCustomFormat().format(new Date()));
 
         Response response = Response.builder()
                 .uid(request.getUid())
@@ -76,6 +86,11 @@ public class MyController {
         }
         modifyResponseService.modify(response);
         log.info("response после модификации: {}", response);
+
+        modifySourceRequestService.modify(request);
+        log.info("request после модификации Source: {}", request);
+        modifyNameRequestService.modify(request);
+        log.info("request после модификации SystemName: {}", request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
