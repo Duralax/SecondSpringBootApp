@@ -7,7 +7,9 @@ public enum ErrorCodes {
     VALIDATION_EXCEPTION("ValidationException"),
     UNKNOWN_EXCEPTION("UnknownException"),
     UNSUPPORTED_CODE_EXCEPTION("UnsupportedCodeException"),
-    UNSUPPORTED_EXCEPTION("UnsupportedException");
+    UNSUPPORTED_EXCEPTION("UnsupportedException"),
+    UNSUPPORTED_POSITION_EXCEPTION("UnsupportedPositionException");
+
 
     private final String name;
 

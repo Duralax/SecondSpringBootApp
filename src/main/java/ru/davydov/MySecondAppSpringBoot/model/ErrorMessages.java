@@ -6,7 +6,9 @@ public enum ErrorMessages {
     EMPTY(""),
     VALIDATION("Ошибка валидации"),
     UNKNOWN("Не поддерживаемая ошибка"),
-    UNSUPPORTED_CODE("Не поддерживаемый UID");
+    UNSUPPORTED_CODE("Не поддерживаемый UID"),
+    UNSUPPORTED_POSITION("Квартальная премия недоступна для данной должности");
+
 
     private final String description;
 
